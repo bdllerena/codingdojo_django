@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Lender Home</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+<a href="/lender_logout">Logout</a>
+<h5>Hello, {{lender.first_name}} {{lender.last_name}}</h5>
+<h5>Account Balance: ${{lender.money}}</h5>
+<hr>
+<h5>List of people in need of help:</h5>
+<table class="table class table-striped table-bordered table-hovered table-hover">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Need money for</th>
+			<th>Reason for loan</th>
+			<th>Amount needed</th>
+			<th>Amount Raised</th>
+			<th>Action</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% if borrowers %}
+			{% for eachborrower in borrowers %}
+		<tr>
+			<td>{{eachborrower.first_name}} {{eachborrower.last_name}}</td>
+			<td>{{eachborrower.purpose}}</td>
+			<td>{{eachborrower.description}}</td>
+			<td>{{eachborrower.needed}} $</td>
+			<td>{{eachborrower.raised}} $</td>
+			<td>
+				<form action="/borrower/{{eachborrower.id}}/lend" method="post">
+					{%csrf_token %}
+					<input type="number" name="amount">
+					<input type="submit" value="Lend this amount">
+				</form>
+			</td>
+		</tr>
+		{% endfor %}
+	{% endif %}
+	</tbody>
+</table>
+<hr>
+<h5>List of people you lend money to:</h5>
+<table class="table class table-striped table-bordered table-hovered table-hover">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Need Money for</th>
+			<th>Reason for loan</th>
+			<th>Amount needed</th>
+			<th>Amount raised</th>
+			<th>Amount lent</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for loan in loans %}
+			<tr>
+				<td>{{ loan.borrower.first_name }} {{loan.borrower.last_name}}</td>
+				<td>{{loan.borrower.purpose}}</td>
+				<td>{{loan.borrower.description}}</td>
+				<td>{{loan.borrower.needed}}</td>
+				<td>{{loan.borrower.raised}}</td>
+				<td>{{loan.amount}}</td>
+	{% endfor %}
+	</tbody>
+</table>
+</div>
+</body>
+</html>

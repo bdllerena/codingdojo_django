@@ -1,0 +1,99 @@
+{% extends 'cores/base.html' %} {% block content %}
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-centered">
+        <h1 class="mt-5 mb-3">Register</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 offset-md-3 mt-3">
+        <p style="font-size: 13px;">
+          Are you Lender or a Borrower?
+        </p>
+        <input type="checkbox"  class="lender_selected" name="lender" value="{{obj.lender}}"> Lender
+        <input type="checkbox"  class="borrower_selected" name="borrower" value="{{obj.borrower}}"> Borrower
+        
+        <!-- This is the lender form-->
+        <form class="lender_form" method="post" action="/lender_register">
+          <center><h1>You are signing up as a Lender</h1></center>  
+          {% csrf_token %} 
+          <div class="form-group">
+          <p><label for="first_name">First Name:</label>
+              <input id="fnamel" type="text" name="fnamel"  class="form-control" maxlength="100" required></p>
+          <p><label for="last_name">Last Name:</label>
+              <input id="lnamel" type="text" name="lnamel"  class="form-control" maxlength="100" required></p>
+          <p><label for="email">Email:</label>
+                <input id="email" type="email" name="email"  class="form-control" maxlength="100" required></p>
+          <p><label for="password">Password:</label>
+                <input id="password" type="password" name="password"  class="form-control" maxlength="100" required></p>
+          <p><label for="money">Money:</label>
+                  <input id="money" type="number" name="money"  class="form-control"  required></p>   
+           </div>
+          {% if field.errors %} {% for error in field.errors %}
+          <p style="font-size: 13px;">
+            {{ error|escape }}
+          </p>
+          {% endfor %} {% endif %}
+          <center><button type="submit" class="btn btn-primary mt-2">Register</button></center>
+        </form>
+        <!-- This is the borrower form-->
+        <form class="borrower_form" method="post" action="/borrower_register">
+          <center><h1>You are signing up as a Borrower</h1></center>  
+          {% csrf_token %} 
+          <div class="form-group">
+            <p><label for="first_name">First Name:</label>
+              <input id="fnameb" type="text" name="fnameb"  class="form-control" maxlength="100" required></p>
+          <p><label for="last_name">Last Name:</label>
+              <input id="lnameb" type="text" name="lnameb"  class="form-control" maxlength="100" required></p>
+          <p><label for="email">Email:</label>
+                <input id="email" type="email" name="email"  class="form-control" maxlength="100" required></p>
+          <p><label for="password">Password:</label>
+                    <input id="password" type="password" name="password"  class="form-control" maxlength="100" required></p>
+          <p><label for="need_money">Need Money for:</label>
+              <input id="purpose" type="text" name="purpose"  class="form-control"  required></p>       
+          <p><label for="description">Description:</label>
+              <textarea name="description" id="description" lass="form-control" rows="4" cols="50" required></textarea></p>   
+          <p><label for="amount">Amount Needed:</label>
+                <input id="needed" type="number" name="needed"  class="form-control"  required></p>     
+          </div>
+          {% if field.errors %} {% for error in field.errors %}
+          <p style="font-size: 13px;">
+            {{ error|escape }}
+          </p>
+          {% endfor %} {% endif %}
+          <center><button type="submit" class="btn btn-primary mt-2">Register</button></center>
+        </form>
+        <center><a href="/">Already a member?</a></center>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  $(document).ready(function(){
+    $('.lender_form').show();
+    $(".lender_selected").prop("checked", true);
+    $('.borrower_form').hide();
+    $('.lender_selected').click(function(){
+          if($(this).is(":checked")){
+              $('.lender_form').show();
+              $('.borrower_form').hide();
+              $(".borrower_selected").prop("checked", false);
+          }
+          else if($(this).is(":not(:checked)")){
+            $('.lender_form').hide();
+          }
+      });
+    $('.borrower_selected').click(function(){
+          if($(this).is(":checked")){
+              $('.borrower_form').show();
+              $('.lender_form').hide();
+              $(".lender_selected").prop("checked", false);
+          }
+          else if($(this).is(":not(:checked)")){
+            $('.borrower_form').hide();
+          }
+      });
+  });
+</script>
+{% endblock %}
